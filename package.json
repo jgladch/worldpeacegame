@@ -1,0 +1,32 @@
+{
+  "name": "worldpeacegame",
+  "version": "1.0.0",
+  "description": "Modern version of the World Peace Game first conceived by Buckminster Fuller in the 1960's",
+  "main": "src/server.js",
+  "scripts": {
+    "build": "babel --presets es2015 lib --out-dir src",
+    "postinstall": "npm run build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/jgladch/worldpeacegame.git"
+  },
+  "author": "Jeff Gladchun <jeffgladchun@gmail.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/jgladch/worldpeacegame/issues"
+  },
+  "homepage": "https://github.com/jgladch/worldpeacegame#readme",
+  "devDependencies": {
+    "babel": "^6.3.26",
+    "babel-cli": "^6.4.5"
+  },
+  "dependencies": {
+    "babel-preset-es2015": "^6.3.13",
+    "bluebird": "^3.2.1",
+    "express": "^4.13.4",
+    "express-handlebars": "^3.0.0",
+    "lodash": "^4.2.1",
+    "zerorpc": "^0.9.6"
+  }
+}
