@@ -8,8 +8,9 @@
     "build:client": "babel client/scripts --out-dir public/scripts",
     "build:styles": "node-sass -q client/styles --output public/styles",
     "build": "npm run build:server && npm run build:client && npm run build:styles",
+    "start": "nodemon ./src/app.js",
     "postinstall": "npm run build",
-    "start": "node ./src/app.js"
+    "watch": "npm-watch"
   },
   "repository": {
     "type": "git",
@@ -30,9 +31,28 @@
     "express": "^4.13.4",
     "express-handlebars": "^3.0.0",
     "lodash": "^4.2.1",
-    "node-sass": "4.5.0"
+    "node-sass": "4.5.0",
+    "nodemon": "1.11.0",
+    "npm-watch": "0.1.8"
   },
   "engines": {
-    "node": "7.4.0"
+    "node": "7.4.0",
+    "npm": "4.0.5"
+  },
+  "watch": {
+    "build:server": {
+      "patterns": "lib/",
+      "quiet": true
+    },
+    "build:client": {
+      "patterns": "client/scripts",
+      "extensions": "js",
+      "quiet": true
+    },
+    "build:styles": {
+      "patterns": "client/styles",
+      "extensions": "scss",
+      "quiet": true
+    }
   }
 }
