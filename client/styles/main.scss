@@ -8,6 +8,18 @@
   stroke-width: 1.5px;
 }
 
+
+body, html {
+  background-color: rgba(128, 128, 128, 0.32);
+}
+
+svg {
+  background-color: rgb(255, 231, 231);
+  left: 0;
+  position: absolute;
+  top: 0;
+}
+
 .graticule {
   fill: none;
   stroke: #000;
