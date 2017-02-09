@@ -5,7 +5,7 @@
   "main": "src/server.js",
   "scripts": {
     "build:server": "babel lib --out-dir src",
-    "build:client": "babel client/scripts --out-dir public/scripts",
+    "build:client": "babel client/scripts --out-dir public/scripts/client",
     "build:styles": "node-sass -q client/styles --output public/styles",
     "build": "npm run build:server && npm run build:client && npm run build:styles",
     "start": "nodemon ./src/app.js",

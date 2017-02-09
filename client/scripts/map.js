@@ -41,4 +41,12 @@ d3.json('/json/d3_dymax/land.json', (error, collection) => {
     .datum(collection)
     .attr('class', 'land')
     .attr('d', path);
+
+svg.selectAll("circle")
+  .data([[-83.8, 42.2],[-83.7, 42.2]]).enter()
+  .append("circle")
+  .attr("cx", function (d) { console.log(projection(d)); return projection(d)[0]; })
+  .attr("cy", function (d) { return projection(d)[1]; })
+  .attr("r", "8px")
+  .attr("fill", "red");
 });
