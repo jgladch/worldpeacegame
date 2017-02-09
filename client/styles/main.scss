@@ -23,6 +23,15 @@ svg#map-canvas {
   background-color: rgba(255, 231, 231, 1);
 }
 
+.airports {
+  fill: #036;
+  stroke: #6cb0e0;
+  stroke-width: 0.5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
 .graticule {
   fill: none;
   stroke: #000;

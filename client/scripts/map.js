@@ -54,6 +54,15 @@ d3.json('/json/d3_dymax/land.json', (error, collection) => {
     .attr('d', path);
 });
 
+d3.json('/json/features/airports.topo.json', (error, collection) => {
+  foreground.selectAll('path')
+    .data(topojson.feature(collection, collection.objects.airports).features)
+    .enter()
+    .append('path')
+    .attr('id', function(d) {return d.id;})
+    .attr('d', path);
+});
+
 foreground.selectAll('circle')
   .data([[-83.8, 42.2],[-83.7, 42.2]]).enter()
   .append('circle')
