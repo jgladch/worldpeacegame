@@ -1,0 +1,29 @@
+.background {
+  fill: #a4bac7;
+}
+
+.foreground {
+  fill: none;
+  stroke: #333;
+  stroke-width: 1.5px;
+}
+
+.graticule {
+  fill: none;
+  stroke: #000;
+  stroke-width: .5px;
+}
+
+.graticule:nth-child(2n) {
+  stroke-dasharray: 2,2;
+}
+
+.land {
+  fill: #d7c7ad;
+  stroke: #766951;
+}
+
+.boundary {
+  fill: none;
+  stroke: #a5967e;
+}

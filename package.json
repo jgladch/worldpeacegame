@@ -4,8 +4,12 @@
   "description": "Modern version of the World Peace Game first conceived by Buckminster Fuller in the 1960's",
   "main": "src/server.js",
   "scripts": {
-    "build": "babel --presets es2015 lib --out-dir src",
-    "postinstall": "npm run build"
+    "build:server": "babel lib --out-dir src",
+    "build:client": "babel client/scripts --out-dir public/scripts",
+    "build:styles": "node-sass -q client/styles --output public/styles",
+    "build": "npm run build:server && npm run build:client && npm run build:styles",
+    "postinstall": "npm run build",
+    "start": "node ./src/app.js"
   },
   "repository": {
     "type": "git",
@@ -17,16 +21,16 @@
     "url": "https://github.com/jgladch/worldpeacegame/issues"
   },
   "homepage": "https://github.com/jgladch/worldpeacegame#readme",
-  "devDependencies": {
-    "babel": "^6.3.26",
-    "babel-cli": "^6.4.5"
-  },
   "dependencies": {
-    "babel-preset-es2015": "^6.3.13",
+    "babel-cli": "6.22.2",
+    "babel-preset-es2015": "6.22.0",
+    "babel-preset-stage-2": "6.22.0",
+    "babel-register": "6.22.0",
     "bluebird": "^3.2.1",
     "express": "^4.13.4",
     "express-handlebars": "^3.0.0",
     "lodash": "^4.2.1",
+    "node-sass": "4.5.0",
     "zerorpc": "^0.9.6"
   }
 }
