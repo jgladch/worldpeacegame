@@ -8,7 +8,6 @@
   stroke-width: 1.5px;
 }
 
-
 body, html {
   background-color: rgba(128, 128, 128, 0.32);
 }
@@ -26,10 +25,10 @@ svg#map-canvas {
 .airports {
   fill: #036;
   stroke: #6cb0e0;
-  stroke-width: 0.5px;
+  stroke-width: 0.25px;
   stroke-linecap: round;
   stroke-linejoin: round;
-  vector-effect: non-scaling-stroke;
+  /*vector-effect: non-scaling-stroke;*/
 }
 
 .graticule {
@@ -50,4 +49,16 @@ svg#map-canvas {
 .boundary {
   fill: none;
   stroke: #a5967e;
+}
+
+.route {
+  fill: none;
+  stroke-width: 0;
+}
+
+.traceroute {
+   stroke: white;
+   fill-opacity: 0;
+   stroke-width: 2px;    
+   opacity: 0.5;
 }
