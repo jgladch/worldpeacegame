@@ -14,10 +14,13 @@ body, html {
 }
 
 svg {
-  background-color: rgb(255, 231, 231);
   left: 0;
   position: absolute;
   top: 0;
+}
+
+svg.map-canvas {
+  background-color: rgba(255, 231, 231, 1);
 }
 
 .graticule {
