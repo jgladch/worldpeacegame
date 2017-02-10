@@ -109,7 +109,7 @@ const OD_PAIRS = [
 const OD_POINTS = ['CDG', 'SFO','HNL','LAX'];
 let airportMap = {};
 
-let loaded = (error, land,  countries, lakes, rivers, airports) => {
+let loaded = (error, land,  countries, lakes, rivers/*, airports*/) => {
   g.append('g').attr('id','land').selectAll('path')
     .data(topojson.feature(land, land.objects.land).features)
     .enter()
@@ -145,10 +145,10 @@ let loaded = (error, land,  countries, lakes, rivers, airports) => {
   // handleAirports(ap);
 };
 
-let q = d3.queue().defer(d3.json, '/json/features/land.topo.json')
-  .defer(d3.json, '/json/features/countries.topo.json')
-  .defer(d3.json, 'json/features/lakes.topo.json')
-  .defer(d3.json, 'json/features/airports.topo.json')
+let q = d3.queue().defer(d3.json, '/json/features/3/land.topo.json')
+  .defer(d3.json, '/json/features/3/countries.topo.json')
+  .defer(d3.json, 'json/features/3/lakes.topo.json')
+  // .defer(d3.json, 'json/features/airports.topo.json')
   .await(loaded);
 
 // d3.json('/json/features/airports.topo.json', (error, collection) => {

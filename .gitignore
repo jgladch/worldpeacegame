@@ -2,3 +2,4 @@ src/
 node_modules/
 public/styles/*
 public/scripts/client/*
+.DS_Store
