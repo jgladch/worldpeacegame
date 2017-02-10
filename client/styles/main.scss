@@ -14,16 +14,6 @@ svg#map-canvas {
   background-color: #84d5f3;
 }
 
-.background {
-  fill: #a4bac7;
-}
-
-.foreground {
-  fill: none;
-  stroke: #333;
-  stroke-width: 1.5px;
-}
-
 .graticule {
   fill: none;
   stroke: #000;
@@ -50,6 +40,31 @@ svg#map-canvas {
   vector-effect: non-scaling-stroke;
 }
 
+.countries {
+  fill: none;
+  stroke-width: 1px;
+  stroke: red;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.lakes {
+  fill: darkblue;
+  stroke-width: 0;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.rivers {
+  fill: blue;
+  stroke-width: 0;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
 .populated_places {
   fill: green;
   stroke-width: 0;
@@ -60,11 +75,20 @@ svg#map-canvas {
 
 .urban_areas {
   fill: blue;
+  stroke-width: 1px;
+  stroke: white;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
 }
 
 .land {
-  fill: #d7c7ad;
-  stroke: #766951;
+  fill: green;
+  stroke-width: 1px;
+  stroke: darkgreen;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
 }
 
 .boundary {
@@ -81,17 +105,16 @@ div.banner {
   position: absolute;
   width: 100%;
   padding: 5px;
-  background-color: red;
   display: flex;
   flex-direction: row;
   flex-wrap: none;
   
   .title {
     margin: 0 auto;
-    background-color: green;
     text {
       font-family: 'Bitter', serif;
-      font-size: 20px;
+      font-size: 35px;
+      color: white;
     }
   }
 }
