@@ -1,3 +1,19 @@
+body, html {
+  background-color: rgba(128, 128, 128, 0.32);
+  margin: 0;
+  padding: 0;
+}
+
+svg {
+  left: 0;
+  position: absolute;
+  top: 0;
+}
+
+svg#map-canvas {
+  background-color: #84d5f3;
+}
+
 .background {
   fill: #a4bac7;
 }
@@ -8,29 +24,6 @@
   stroke-width: 1.5px;
 }
 
-body, html {
-  background-color: rgba(128, 128, 128, 0.32);
-}
-
-svg {
-  left: 0;
-  position: absolute;
-  top: 0;
-}
-
-svg#map-canvas {
-  background-color: rgba(255, 231, 231, 1);
-}
-
-.airports {
-  fill: #036;
-  stroke: #6cb0e0;
-  stroke-width: 0.25px;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  /*vector-effect: non-scaling-stroke;*/
-}
-
 .graticule {
   fill: none;
   stroke: #000;
@@ -39,6 +32,34 @@ svg#map-canvas {
 
 .graticule:nth-child(2n) {
   stroke-dasharray: 2,2;
+}
+
+.airports {
+  fill: #036;
+  stroke-width: 0;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.ports {
+  fill: red;
+  stroke-width: 0;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.populated_places {
+  fill: green;
+  stroke-width: 0;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.urban_areas {
+  fill: blue;
 }
 
 .land {
@@ -56,9 +77,29 @@ svg#map-canvas {
   stroke-width: 0;
 }
 
+div.banner {
+  position: absolute;
+  width: 100%;
+  padding: 5px;
+  background-color: red;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: none;
+  
+  .title {
+    margin: 0 auto;
+    background-color: green;
+    text {
+      font-family: 'Bitter', serif;
+      font-size: 20px;
+    }
+  }
+}
+
+/*
 .traceroute {
    stroke: white;
    fill-opacity: 0;
    stroke-width: 2px;    
    opacity: 0.5;
-}
+}*/
