@@ -1,5 +1,5 @@
 body, html {
-  background-color: rgba(128, 128, 128, 0.32);
+  background-color: white;
   margin: 0;
   padding: 0;
 }
@@ -10,9 +10,9 @@ svg {
   top: 0;
 }
 
-svg#map-canvas {
-  background-color: #84d5f3;
-}
+// svg#map-canvas {
+//   background-color: #84d5f3;
+// }
 
 .graticule {
   fill: none;
@@ -49,17 +49,37 @@ svg#map-canvas {
   vector-effect: non-scaling-stroke;
 }
 
+.states {
+  fill: none;
+  stroke-width: 1px;
+  stroke: blue;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
 .lakes {
   fill: darkblue;
-  stroke-width: 0;
+  stroke: blue;
+  stroke-width: 1px;
   stroke-linecap: round;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
 }
 
 .rivers {
-  fill: blue;
-  stroke-width: 0;
+  fill: none;
+  stroke: blue;
+  stroke-width: 0.5px;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.roads {
+  fill: none;
+  stroke: #7C3D20;
+  stroke-width: 0.5px;
   stroke-linecap: round;
   stroke-linejoin: round;
   vector-effect: non-scaling-stroke;
@@ -74,7 +94,7 @@ svg#map-canvas {
 }
 
 .urban_areas {
-  fill: blue;
+  fill: white;
   stroke-width: 1px;
   stroke: white;
   stroke-linecap: round;
@@ -83,7 +103,7 @@ svg#map-canvas {
 }
 
 .land {
-  fill: green;
+  fill: #03C309;
   stroke-width: 1px;
   stroke: darkgreen;
   stroke-linecap: round;
@@ -112,10 +132,31 @@ div.banner {
   .title {
     margin: 0 auto;
     text {
-      font-family: 'Bitter', serif;
-      font-size: 35px;
-      color: white;
+      font-family: 'Orbitron', sans-serif;
+      font-size: 55px;
+      color: rgba(255, 255, 255, 0.8);
     }
+  }
+}
+
+div.hud {
+  position: absolute;
+  width: 300px;
+  left: 0;
+  top: 0;
+  display: flex;
+  flex-direction: column;
+  border: 3px solid rgba(255, 255, 255, 0.8);
+  padding: 5px;
+  margin: 5px;
+
+  .time {
+    margin: 0 auto;
+    text {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 30px;
+      font-family: 'Orbitron', sans-serif;
+    }    
   }
 }
 

@@ -3,12 +3,31 @@ let height = document.documentElement.clientHeight;
 let scale = (width - 220) / 5;
 let land;
 
-// Something like this might come in handy later
-// $(window).resize(function() {
-//   currentWidth = $('#map').width();
-//   svg.attr('width', currentWidth);
-//   svg.attr('height', currentWidth * height / width);
-// });
+let precision = '3';
+
+let windowResizeHandler = (e) => {
+  let currWidth = $(window).width();
+  let currHeight = $(window).height();
+
+  let deltaWidth = currWidth - width;
+  let deltaHeight = currHeight - height;
+
+  let scale = (currWidth - 220) / 5;
+  let bbox = d3.select('#map-canvas').node().getBBox();
+
+  svg.attr('transform', `translate(${[deltaWidth / 2, deltaHeight / 2]}) scale(${1})`);
+  g.attr('transform', `translate(${[deltaWidth / 2, deltaHeight / 2]}) scale(${1})`);
+};
+
+$(window).bind('resize', (e) => {
+  window.resizeEvt;
+  $(window).resize(() => {
+    clearTimeout(window.resizeEvt);
+    window.resizeEvt = setTimeout(() => {
+      return windowResizeHandler(e);
+    }, 250);
+  });
+});
 
 let projection = d3.geo.dymaxion()
   .scale(scale)
@@ -19,8 +38,19 @@ let path = d3.geo.path()
 
 let graticule = d3.geo.graticule();
 
-let svg = d3.select('body').append('svg')
-  .attr('id', 'map-canvas')
+let svg = d3.select('body').append('svg');
+
+let t = textures.paths().d('waves').stroke('#abadff').size(7).strokeWidth(1).background('#0DDAFF');
+
+svg.call(t);
+
+svg.append('rect')
+  .attr('id', 'background')
+  .attr('width', '100%')
+  .attr('height', '100%')
+  .attr('fill', t.url());
+
+svg.attr('id', 'map-canvas')
   .attr('width', '100%')
   .attr('height', '100%')
   .call(d3.behavior.zoom().on('zoom', () => { // Shift over all layers of SVG
@@ -30,7 +60,7 @@ let svg = d3.select('body').append('svg')
 
 let g = svg.append('g');
 
-
+// Paint Graticle lines if you want to see them
 // g.append('path')
 //   .datum(graticule.outline)
 //   .attr('class', 'background')
@@ -47,124 +77,57 @@ let g = svg.append('g');
 //   .attr('class', 'foreground')
 //   .attr('d', path);
 
-// d3.json('/json/features/urban_areas.topo.json', (error, collection) => {
-//   g.append('g').attr('id','urban_areas').selectAll('path')
-//     .data(topojson.feature(collection, collection.objects.urban_areas).features)
-//     .enter()
-//     .append('path')
-//     .attr('class', 'urban_areas')
-//     .attr('d', path);
-// });
-
-const OD_PAIRS = [
-  ['NRT', 'JFK'],
-  ['SFO', 'NRT'],
-  ['LAX', 'HNL'],
-  ['HNL', 'NRT'],
-  ['CDG', 'JFK'],
-  ['NRT', 'SYD'],
-  ['FCO', 'PEK'],
-  ['LHR', 'PVG'],
-  ['NRT', 'ARN'],
-  ['LAX', 'JFK'],
-  ['NRT', 'DEL'],
-  ['DFW', 'GRU'],
-  ['MAD', 'ATL'],
-  ['ORD', 'CAI'],
-  ['HKG', 'CDG'],
-  ['LAS', 'CDG'],
-  ['NRT', 'SVO'],
-  ['DEN', 'HNL'],
-  ['ORD', 'LAX'],
-  ['SIN', 'SEA'],
-  ['SYD', 'PEK'],
-  ['CAI', 'CPT'],
-  ['CUN', 'JFK'],
-  ['ORD', 'JFK'],
-  ['LHR', 'BOM'],
-  ['LAX', 'MEX'],
-  ['LHR', 'CPT'],
-  ['PVG', 'CGK'],
-  ['SYD', 'BOM'],
-  ['JFK', 'CPT'],
-  ['MAD', 'GRU'],
-  ['EZE', 'FCO'],
-  ['DEL', 'DXB'],
-  ['DXB', 'NRT'],
-  ['GRU', 'MIA'],
-  ['SVO', 'PEK'],
-  ['YYZ', 'ARN'],
-  ['LHR', 'YYC'],
-  ['HNL', 'SEA'],
-  ['JFK', 'EZE'],
-  ['EZE', 'LAX'],
-  ['CAI', 'HKG'],
-  ['SVO', 'SIN'],
-  ['IST', 'MCO'],
-  ['MCO', 'LAX'],
-  ['FRA', 'LAS'],
-  ['ORD', 'FRA'],
-  ['MAD', 'JFK']
-];
-const OD_POINTS = ['CDG', 'SFO','HNL','LAX'];
 let airportMap = {};
 
-let loaded = (error, land,  countries, lakes, rivers/*, airports*/) => {
-  g.append('g').attr('id','land').selectAll('path')
-    .data(topojson.feature(land, land.objects.land).features)
+let pathGenerator = (id, topojson, optPath) => {
+  g.append('g').attr('id', id).selectAll('path')
+    .data(topojson)
     .enter()
     .append('path')
-    .attr('class', 'land')
-    .attr('d', path);
-
-  g.append('g').attr('id','countries').selectAll('path')
-    .data(topojson.feature(countries, countries.objects.countries).features)
-    .enter()
-    .append('path')
-    .attr('class', 'countries')
-    .attr('d', path);
-
-  g.append('g').attr('id','lakes').selectAll('path')
-    .data(topojson.feature(lakes, lakes.objects.lakes).features)
-    .enter()
-    .append('path')
-    .attr('class', 'lakes')
-    .attr('d', path);
-
-  // const ap = topojson.feature(airports, airports.objects.airports).features;
-  // g.append('g').attr('id','airports').selectAll('path')
-  //   .data(ap)
-  //   .enter()
-  //   .append('path')
-  //   .attr('class', 'airports')
-  //   .attr('id', (d) => {
-  //     return d.properties.abbrev;
-  //   })
-  //   .attr('d', path.pointRadius(2));
-
-  // handleAirports(ap);
+    .attr('class', id)
+    .attr('d', optPath || path);
 };
 
-let q = d3.queue().defer(d3.json, '/json/features/3/land.topo.json')
-  .defer(d3.json, '/json/features/3/countries.topo.json')
-  .defer(d3.json, 'json/features/3/lakes.topo.json')
-  // .defer(d3.json, 'json/features/airports.topo.json')
-  .await(loaded);
+let loaded = (error, files) => {
+  const smallpaths = ['airports', 'ports', 'countries', 'states'];
 
-// d3.json('/json/features/airports.topo.json', (error, collection) => {
-//   const geos = topojson.feature(collection, collection.objects.airports).features;
-//   foreground.selectAll('path')
-//     .data(topojson.feature(collection, collection.objects.airports).features)
-//     .enter()
-//     .append('path')
-//     .attr('class', 'airports')
-//     .attr('id', (d) => {
-//       return d.properties.abbrev;
-//     })
-//     .attr('d', smPtPath);
+  _.each(files, (file, idx) => { // Crawl all deferred files
+    _.forOwn(file, (val, key) => { 
+      if (key === 'objects') { // Find which type of feature it contains
+        let type = _.first(_.keys(val));
+        let tp = topojson.feature(file, file.objects[type]).features;
+        let optPath;
 
-//   handleAirports(geos);
-// });
+        if (type === 'airports') {
+          handleAirports(tp);
+        }
+
+        if (_.includes(smallpaths, type)) {
+          optPath = path.pointRadius(1);
+        } else {
+          optPath = path;
+        }
+
+        pathGenerator(type, tp, optPath); // Chart it
+      }
+    });
+  });
+};
+
+// Select which JSON files you want to load
+let q = d3.queue().defer(d3.json, `/json/features/${precision}/land.topo.json`)
+  // .defer(d3.json, `/json/features/${precision}/sovereignty.topo.json`)
+  // .defer(d3.json, `/json/features/${precision}/countries.topo.json`)
+  // .defer(d3.json, `/json/features/${precision}/states.topo.json`)
+  .defer(d3.json, `/json/features/${precision}/lakes.topo.json`)
+  .defer(d3.json, `/json/features/100/airports.topo.json`)
+  .defer(d3.json, `/json/features/100/ports.topo.json`)
+  .defer(d3.json, `/json/features/${precision}/rivers.topo.json`)
+  // .defer(d3.json, `/json/features/${precision}/glaciers.topo.json`)
+  // .defer(d3.json, `/json/features/${precision}/regions.topo.json`)
+  // .defer(d3.json, `/json/features/${precision}/roads.topo.json`)
+  // .defer(d3.json, `/json/features/${precision}/railroads.topo.json`)
+  .awaitAll(loaded);
 
 let handleAirports = (geos) => {
   _.each(geos, (geo) => {
@@ -186,35 +149,14 @@ let handleAirports = (geos) => {
     let od = OD_PAIRS[i];
     fly(od[0], od[1]);
     i++;
-  }, 1500); // 1500 for development
+  }, 150);
 };
 
-// d3.json('/json/features/ports.topo.json', (error, collection) => {
-//   svg.append('g').attr('id','ports').selectAll('path')
-//     .data(topojson.feature(collection, collection.objects.ports).features)
-//     .enter()
-//     .append('path')
-//     .attr('class', 'ports')
-//     .attr('d', smPtPath);
-// });
+let worldTime = () => {
+  $('.time text').text(moment().format('H:mm:ss'))
+};
+setInterval(worldTime, 1000);
 
-// d3.json('/json/features/populated_places.topo.json', (error, collection) => {
-//   console.log('pp: ', topojson.feature(collection, collection.objects.populated_places));
-//   svg.append('g').attr('id','populated_places').selectAll('path')
-//     .data(topojson.feature(collection, collection.objects.populated_places).features)
-//     .enter()
-//     .append('path')
-//     .attr('class', 'populated_places')
-//     .attr('d', smPtPath);
-// });
-
-// foreground.selectAll('circle')
-//   .data([[-83.8, 42.2],[-83.7, 42.2]]).enter()
-//   .append('circle')
-//   .attr('cx', (d) => { return projection(d)[0]; })
-//   .attr('cy', (d) => { return projection(d)[1]; })
-//   .attr('r', '8px')
-//   .attr('fill', 'red');
 
 /**
  * Transition a plane on a route
