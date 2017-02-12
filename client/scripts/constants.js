@@ -74,3 +74,5 @@ const OD_PAIRS = [
   ['MAD', 'JFK']
 ];
 const OD_POINTS = ['CDG', 'SFO','HNL','LAX'];
+
+const smallpaths = ['airports', 'ports', 'countries', 'states', 'populated_places'];

@@ -1,8 +1,7 @@
 let width = document.documentElement.clientWidth;
 let height = document.documentElement.clientHeight;
 let scale = (width - 220) / 5;
-let land;
-
+let airportMap = {};
 let precision = '3';
 
 let windowResizeHandler = (e) => {
@@ -44,11 +43,11 @@ let t = textures.paths().d('waves').stroke('#abadff').size(7).strokeWidth(1).bac
 
 svg.call(t);
 
-svg.append('rect')
-  .attr('id', 'background')
-  .attr('width', '100%')
-  .attr('height', '100%')
-  .attr('fill', t.url());
+// svg.append('rect') // This paints a nice background, but seems to take up more resources
+//   .attr('id', 'background')
+//   .attr('width', '100%')
+//   .attr('height', '100%')
+//   .attr('fill', t.url());
 
 svg.attr('id', 'map-canvas')
   .attr('width', '100%')
@@ -77,9 +76,24 @@ let g = svg.append('g');
 //   .attr('class', 'foreground')
 //   .attr('d', path);
 
-let airportMap = {};
+/**
+ * Given the name of the features to be painted ('airports',
+ * 'rivers', etc) set correct path config and paint some SVG :)
+ * @param {String} id The type of features to be painted
+ */
+let pathGenerator = (id, topojson) => {
+  let optPath;
 
-let pathGenerator = (id, topojson, optPath) => {
+  if (id === 'airports') {
+    // handleAirports(tp);
+  }
+
+  if (_.includes(smallpaths, id)) { // `smallpaths` comes from constants.js
+    optPath = path.pointRadius(1);
+  } else {
+    optPath = path;
+  }
+
   g.append('g').attr('id', id).selectAll('path')
     .data(topojson)
     .enter()
@@ -88,27 +102,17 @@ let pathGenerator = (id, topojson, optPath) => {
     .attr('d', optPath || path);
 };
 
-let loaded = (error, files) => {
-  const smallpaths = ['airports', 'ports', 'countries', 'states'];
-
+/**
+ * Callback invoked once all deffered tasks have completed
+ */
+let onReady = (error, files) => {
   _.each(files, (file, idx) => { // Crawl all deferred files
     _.forOwn(file, (val, key) => { 
       if (key === 'objects') { // Find which type of feature it contains
-        let type = _.first(_.keys(val));
-        let tp = topojson.feature(file, file.objects[type]).features;
-        let optPath;
+        let id = _.first(_.keys(val));
+        let tp = topojson.feature(file, file.objects[id]).features;
 
-        if (type === 'airports') {
-          handleAirports(tp);
-        }
-
-        if (_.includes(smallpaths, type)) {
-          optPath = path.pointRadius(1);
-        } else {
-          optPath = path;
-        }
-
-        pathGenerator(type, tp, optPath); // Chart it
+        pathGenerator(id, tp); // Chart it
       }
     });
   });
@@ -120,15 +124,20 @@ let q = d3.queue().defer(d3.json, `/json/features/${precision}/land.topo.json`)
   // .defer(d3.json, `/json/features/${precision}/countries.topo.json`)
   // .defer(d3.json, `/json/features/${precision}/states.topo.json`)
   .defer(d3.json, `/json/features/${precision}/lakes.topo.json`)
+  .defer(d3.json, `/json/features/${precision}/urban_areas.topo.json`)
+  .defer(d3.json, `/json/features/100/populated_places.topo.json`)
   .defer(d3.json, `/json/features/100/airports.topo.json`)
   .defer(d3.json, `/json/features/100/ports.topo.json`)
-  .defer(d3.json, `/json/features/${precision}/rivers.topo.json`)
+  // .defer(d3.json, `/json/features/${precision}/rivers.topo.json`)
   // .defer(d3.json, `/json/features/${precision}/glaciers.topo.json`)
   // .defer(d3.json, `/json/features/${precision}/regions.topo.json`)
   // .defer(d3.json, `/json/features/${precision}/roads.topo.json`)
   // .defer(d3.json, `/json/features/${precision}/railroads.topo.json`)
-  .awaitAll(loaded);
+  .awaitAll(onReady);
 
+/**
+ * Begins process that animates planes flying between airports
+ */
 let handleAirports = (geos) => {
   _.each(geos, (geo) => {
     if (!!geo) {
@@ -152,6 +161,9 @@ let handleAirports = (geos) => {
   }, 150);
 };
 
+/**
+ * Maintains world clock
+ */
 let worldTime = () => {
   $('.time text').text(moment().format('H:mm:ss'))
 };
