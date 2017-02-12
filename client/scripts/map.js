@@ -84,22 +84,43 @@ let g = svg.append('g');
 let pathGenerator = (id, topojson) => {
   let optPath;
 
-  if (id === 'airports') {
-    // handleAirports(tp);
-  }
-
   if (_.includes(smallpaths, id)) { // `smallpaths` comes from constants.js
     optPath = path.pointRadius(1);
   } else {
     optPath = path;
   }
 
-  g.append('g').attr('id', id).selectAll('path')
-    .data(topojson)
-    .enter()
-    .append('path')
-    .attr('class', id)
-    .attr('d', optPath || path);
+  let group = g.append('g').attr('id', id);
+
+  if (id === 'airports') {
+    handleAirports(topojson);
+  } else if (id === 'populated_places') {
+    topojson = _.filter(topojson, (ft) => {
+      return ft.properties.POP_MAX > 1000000;
+    });
+
+    const circleJson = _.map(topojson, (ft) => {
+      return ft.geometry.coordinates;
+    });
+
+    return group.selectAll('circle')
+      .data(circleJson).enter()
+      .append('circle')
+      .attr('cx', (d) => { return projection(d)[0]; })
+      .attr('cy', (d) => { return projection(d)[1]; })
+      .attr('r', (d, i) => {
+        return Math.ceil(topojson[i].properties.RANK_MAX / 4);
+      })
+      .attr('fill', 'white');
+
+  } else { // Handle all others like this
+    return group.selectAll('path')
+      .data(topojson)
+      .enter()
+      .append('path')
+      .attr('class', id)
+      .attr('d', optPath);
+  }
 };
 
 /**
@@ -112,7 +133,7 @@ let onReady = (error, files) => {
         let id = _.first(_.keys(val));
         let tp = topojson.feature(file, file.objects[id]).features;
 
-        pathGenerator(id, tp); // Chart it
+        return pathGenerator(id, tp); // Chart it
       }
     });
   });
@@ -124,7 +145,7 @@ let q = d3.queue().defer(d3.json, `/json/features/${precision}/land.topo.json`)
   // .defer(d3.json, `/json/features/${precision}/countries.topo.json`)
   // .defer(d3.json, `/json/features/${precision}/states.topo.json`)
   .defer(d3.json, `/json/features/${precision}/lakes.topo.json`)
-  .defer(d3.json, `/json/features/${precision}/urban_areas.topo.json`)
+  // .defer(d3.json, `/json/features/${precision}/urban_areas.topo.json`)
   .defer(d3.json, `/json/features/100/populated_places.topo.json`)
   .defer(d3.json, `/json/features/100/airports.topo.json`)
   .defer(d3.json, `/json/features/100/ports.topo.json`)
